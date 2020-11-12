@@ -1,0 +1,9 @@
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\bin\Debug\netcoreapp3.1\BusinessLayer.deps.json
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\bin\Debug\netcoreapp3.1\BusinessLayer.dll
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\bin\Debug\netcoreapp3.1\BusinessLayer.pdb
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.csprojAssemblyReference.cache
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.AssemblyInfoInputs.cache
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.AssemblyInfo.cs
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.csproj.CoreCompileInputs.cache
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.dll
+C:\Users\willi\Desktop\HoGent\2020-2021\WEB 4\KlantBestelling-REST-service-master\BusinessLayer\obj\Debug\netcoreapp3.1\BusinessLayer.pdb
