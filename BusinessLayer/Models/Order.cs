@@ -19,7 +19,11 @@ namespace BusinessLayer
             SetProduct(product);
             SetCustomer(customer);
         }
-
+        public Order(string product, int total)
+        {
+            SetTotal(total);
+            SetProduct(product);
+        }
         public void SetProduct(string product)
         {
             string temp = product.ToLower().Replace(" ", "");

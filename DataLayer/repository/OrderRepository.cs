@@ -18,7 +18,7 @@ namespace DataLayer
 
         public void add(Order order)
         {
-            Customer temp = context.CustomerData.Include(s => s.orderList).Where(s => s.ID == order.Customer.ID).ToList()[0];
+            Customer temp = context.CustomerData.Include(s =>s.orderList).ToList().Find(s => s.ID == order.Customer.ID);
             if (temp != null)
                 temp.AddOrder(order);
             else
