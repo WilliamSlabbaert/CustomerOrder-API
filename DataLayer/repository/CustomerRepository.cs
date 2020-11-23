@@ -26,7 +26,7 @@ namespace DataLayer
 
         public List<Customer> getAll()
         {
-            return context.CustomerData.Include(s =>s.orderList).ThenInclude(s =>s.Customer).ToList();
+            return context.CustomerData.Include(Customer =>Customer.orderList).ThenInclude(order =>order.Customer).ToList();
         }
 
         public Customer getById(int id)
@@ -46,9 +46,7 @@ namespace DataLayer
 
         public void update( int ID, Customer customer)
         {
-            Customer x = getById(ID);
-            x.SetAdress(customer.Adress);
-            x.SetName(customer.Name);
+            context.Update(customer);
         }
         public bool CustomerExist(String name,String adress)
         {

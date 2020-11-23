@@ -26,7 +26,7 @@ namespace API_CustomerService.Controllers
         {
             try
             {
-                return OManager.Getall().Select(s => new SampleOrder() { ID = s.ID, CustomerID = s.Customer.ID, total = s.Total, products = s.products }).ToList();
+                return OManager.Getall().Select(s => new SampleOrder() { ID = "https://localhost:44316/api/Customers/Orders/" + s.ID.ToString(), CustomerID = ("https://localhost:44316/api/Customers/" + s.Customer.ID).ToString(), total = s.Total, products = s.products }).ToList();
             }
             catch
             {
@@ -39,7 +39,7 @@ namespace API_CustomerService.Controllers
             try
             {
                 CManager.GetCustomer(id);
-                return OManager.GetAllOrdersByCustomerId(id).Select(s => new SampleOrder() { ID = s.ID,CustomerID = s.Customer.ID,total = s.Total,products = s.products}).ToList();
+                return OManager.GetAllOrdersByCustomerId(id).Select(s => new SampleOrder() { ID = "https://localhost:44316/api/Customers/Orders/" + s.ID.ToString(), CustomerID = ("https://localhost:44316/api/Customers/" + s.Customer.ID).ToString(), total = s.Total, products = s.products }).ToList();
             }
             catch
             {
@@ -52,7 +52,7 @@ namespace API_CustomerService.Controllers
             try
             {
                 var temp = OManager.GetOrder(Order_id);
-                return new SampleOrder() { ID = temp.ID,CustomerID = temp.Customer.ID,total = temp.Total,products = temp.products};
+                return new SampleOrder() { ID = "https://localhost:44316/api/Customers/Orders/" + temp.ID.ToString(), CustomerID = ("https://localhost:44316/api/Customers/" + temp.Customer.ID).ToString(), total = temp.Total, products = temp.products };
             }
             catch
             {
@@ -68,7 +68,7 @@ namespace API_CustomerService.Controllers
                 Order temp = new Order(tempCustomer, order.products, order.total);
                 OManager.AddOrder(temp);
 
-                return Ok(temp);
+                return CreatedAtAction(nameof(GetCustomerOrder), new { Order_id = temp.ID }, temp);
             }
             catch
             {
@@ -76,23 +76,26 @@ namespace API_CustomerService.Controllers
             }
         }
         [HttpPut("{id}/Orders/{Order_ID}")]
-        public ActionResult<Order> PutCustomerOrders(int id,int Order_ID, [FromBody] SampleOrder order)
+        public ActionResult<SampleOrder> PutCustomerOrders(int id, int Order_ID, [FromBody] SampleOrder order)
         {
-            try {
+            try
+            {
                 var tempOrder = CManager.GetCustomer(id).orderList.FirstOrDefault(s => s.ID == Order_ID);
 
                 if (tempOrder == null)
                     return NotFound("Order doesn't exist");
-                if (order.CustomerID != 0)
-                    tempOrder.SetCustomer(CManager.GetCustomer(order.CustomerID));
 
                 tempOrder.SetProduct(order.products);
                 tempOrder.SetTotal(order.total);
                 OManager.UpdateOrder(tempOrder);
+                var temp = OManager.GetOrder(Order_ID);
 
-                return CManager.GetCustomer(id).orderList.FirstOrDefault(s => s.ID == Order_ID);
+                return CreatedAtAction(nameof(GetCustomerOrder), new { Order_id = temp.ID }, temp);
             }
-            catch { return NotFound("Customer doesn't exist"); }
+            catch
+            {
+                return NotFound("Customer doesn't exist");
+            }
         }
         [HttpDelete("{id}/Orders/{Order_ID}")]
         public ActionResult DeleteCustomerOrders(int id, int Order_ID)
@@ -118,7 +121,6 @@ namespace API_CustomerService.Controllers
             {
                 OManager.DeleteAllOrders();
                 return NoContent();
-
             }
             catch { return BadRequest(); }
         }

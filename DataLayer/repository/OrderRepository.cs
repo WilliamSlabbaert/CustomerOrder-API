@@ -57,10 +57,12 @@ namespace DataLayer
 
         public void update(int id, Order order)
         {
-            Order x = getById(id);
-            x.SetCustomer(order.Customer);
-            x.SetProduct(order.products);
-            x.SetTotal(order.Total);
+            var temp = getById(id);
+            temp.SetCustomer(order.Customer);
+            temp.SetProduct(order.products);
+            temp.SetTotal(order.Total);
+
+            context.Update(temp);
         }
     }
 }

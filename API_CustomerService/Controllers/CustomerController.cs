@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using API_CustomerService.sample_object;
 using BusinessLayer;
 using DataLayer;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,9 @@ namespace API_CustomerService.Controllers
         }
 
         [HttpGet]
-        public ICollection<Customer> GetAllCustomers()
+        public List<SampleCustomer> GetAllCustomers()
         {
-            try { return CManager.GetAllCustomers(); }
+            try { return CManager.GetAllCustomers().Select(temp => new SampleCustomer { ID = "https://localhost:44316/api/Customers/" + temp.ID.ToString(), Name = temp.Name, Adress = temp.Adress, OrderIds = temp.orderList.Select(s => "https://localhost:44316/api/Customers/Orders/" + s.ID.ToString()).ToList() }).ToList(); }
             catch
             {
                 Response.StatusCode = 400;
@@ -34,32 +35,49 @@ namespace API_CustomerService.Controllers
             }
         }
         [HttpGet("{id}")]
-        public ActionResult<Customer> GetCustomer(int id)
+        public ActionResult<SampleCustomer> GetCustomer(int id)
         {
-            try { return CManager.GetCustomer(id); }
+            try
+            {
+                var temp = CManager.GetCustomer(id);
+                return  new SampleCustomer { ID = "https://localhost:44316/api/Customers/" + temp.ID.ToString(), Name = temp.Name, Adress = temp.Adress, OrderIds = temp.orderList.Select(s => "https://localhost:44316/api/Customers/Orders/" + s.ID.ToString()).ToList() };
+            }
             catch { return NotFound("Customer doesn't exist"); }
         }
 
         [HttpPost]
         public ActionResult<Customer> PostCustomer([FromBody] sample_object.SampleCustomer cus)
         {
-            Customer customer = new Customer(cus.Name, cus.Adress);
-            if (CManager.ExistCustomerCheck(customer))
-                return BadRequest("Customer already exists");
-            CManager.AddCustomer(customer);
-            Response.StatusCode = 201;
-            return customer;
+            try
+            {
+                Customer customer = new Customer(cus.Name, cus.Adress);
+                if (CManager.ExistCustomerCheck(customer))
+                    return BadRequest("Customer already exists");
+                CManager.AddCustomer(customer);
+                return CreatedAtAction(nameof(GetCustomer), new { id = customer.ID }, customer);
+            }
+            catch
+            {
+                throw new Exception("invalid values");
+            }
         }
         [HttpPut("{ID}")]
         public ActionResult<Customer> PutCustomer(int ID, [FromBody] sample_object.SampleCustomer cus)
         {
             try
             {
-                Customer customer = new Customer(cus.Name, cus.Adress);
-                if (CManager.ExistCustomerCheck(customer))
+                Customer customer = CManager.GetCustomer(ID);
+                var temp = new Customer(cus.Name, cus.Adress);
+                if (CManager.ExistCustomerCheck(temp))
                     return BadRequest("Customer already exists");
+
+                customer.SetAdress(cus.Adress);
+                customer.SetName(cus.Name);
+
                 CManager.UpdateCustomer(ID, customer);
-                return CManager.GetCustomer(ID);
+
+
+                return CreatedAtAction(nameof(GetCustomer), new { id = ID }, CManager.GetCustomer(ID));
             }
             catch { return NotFound("Customer doesn't exist"); }
         }
@@ -69,7 +87,7 @@ namespace API_CustomerService.Controllers
             try
             {
                 var temp = CManager.GetCustomer(id);
-                if(temp.orderList.Count == 0)
+                if (temp.orderList.Count == 0)
                 {
                     CManager.DeleteCustomer(id);
                     return NoContent();
@@ -78,7 +96,7 @@ namespace API_CustomerService.Controllers
                     return BadRequest("Orders still linked to customer");
             }
             catch { return NotFound("Customer doesn't exist"); }
-            
+
         }
 
     }

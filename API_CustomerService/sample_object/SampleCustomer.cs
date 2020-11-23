@@ -7,13 +7,10 @@ namespace API_CustomerService.sample_object
 {
     public class SampleCustomer
     {
-        public SampleCustomer(string name, string adress)
-        {
-            Name = name;
-            Adress = adress;
-        }
 
+        public String ID { get; set; }
         public string Name { get; set; }
         public string Adress { get; set; }
+        public List<String> OrderIds { get; set; } = new List<string>();
     }
 }
